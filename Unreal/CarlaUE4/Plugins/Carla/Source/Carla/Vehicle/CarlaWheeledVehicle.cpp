@@ -8,6 +8,7 @@
 #include "CarlaWheeledVehicle.h"
 
 #include "Agent/VehicleAgentComponent.h"
+#include "WheeledVehicleAIController.h"
 
 #include "Components/BoxComponent.h"
 #include "Engine/CollisionProfile.h"
@@ -26,6 +27,12 @@ ACarlaWheeledVehicle::ACarlaWheeledVehicle(const FObjectInitializer& ObjectIniti
 
   VehicleAgentComponent = CreateDefaultSubobject<UVehicleAgentComponent>(TEXT("VehicleAgentComponent"));
   VehicleAgentComponent->SetupAttachment(RootComponent);
+
+  if (GetWorld() && GetWorld()->IsServer()) {
+
+    //AIControllerClass = AWheeledVehicleAIController::StaticClass();
+    //SpawnDefaultController();
+  }
 
   GetVehicleMovementComponent()->bReverseAsBrake = false;
 }

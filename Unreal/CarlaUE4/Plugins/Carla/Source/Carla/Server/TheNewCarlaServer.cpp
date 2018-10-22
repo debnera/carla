@@ -43,6 +43,8 @@
   #pragma warning(pop)
 #endif
 #include <vector>
+#include <Carla/Vehicle/WheeledVehicleAIController.h>
+#include "Carla/Vehicle/MyWheeledVehicleAIController.h"
 
 // =============================================================================
 // -- Static local functions ---------------------------------------------------
@@ -306,10 +308,17 @@ void FTheNewCarlaServer::FPimpl::BindActions()
       RespondErrorStr("unable to set autopilot: actor is not a vehicle");
     }
     auto Controller = Cast<AWheeledVehicleAIController>(Vehicle->GetController());
-    if (Controller == nullptr) {
-      RespondErrorStr("unable to set autopilot: vehicle has an incompatible controller");
+    auto Controller2 = Cast<AMyWheeledVehicleAIController>(Vehicle->GetController());
+    if (Vehicle->GetController() == nullptr) {
+      RespondErrorStr("unable to set autopilot: vehicle does not have a controller");
     }
-    Controller->SetAutopilot(bEnabled);
+    if (Controller != nullptr) {
+      Controller->SetAutopilot(bEnabled);
+    }
+    if (Controller2 != nullptr) {
+      Controller2->SetAutopilot(bEnabled);
+    }
+    RespondErrorStr("unable to set autopilot: vehicle has an incompatible controller");
   });
 }
 
