@@ -11,6 +11,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "CarlaGameInstance.h"
 
 #include "TheNewCarlaGameModeBase.generated.h"
 
