@@ -6,6 +6,7 @@
 
 #pragma once
 
+
 #include "Carla/Actor/ActorDispatcher.h"
 #include "Kismet/GameplayStatics.h"
 #include "Carla/Game/CarlaPlayerController.h"
@@ -62,42 +63,7 @@ public:
   /// view is invalid.
   TPair<EActorSpawnResultStatus, FActorView> SpawnActorWithInfo(
       const FTransform &Transform,
-      FActorDescription ActorDescription)
-  {
-
-    TArray<FString> MapKeys;
-    TArray<FActorAttribute> MapValues;
-
-    ActorDescription.Variations.GenerateValueArray(MapValues);
-    ActorDescription.Variations.GenerateKeyArray(MapKeys);
-    for (auto It = MapValues.CreateConstIterator(); It; ++It)
-    {
-      UE_LOG(LogCarla, Error, TEXT("MapValues '%s' (UId=%s)"), *It->Id, *It->Value);
-    }
-    for (auto It = MapKeys.CreateConstIterator(); It; ++It)
-    {
-      //Variations.Add(MapKeys[It.GetIndex()], MapValues[It.GetIndex()]);
-      UE_LOG(LogCarla, Error, TEXT("MapKeys and values '%s' (UId=%s)"), *MapKeys[It.GetIndex()], *MapValues[It.GetIndex()].Value);
-    }
-    if (GetWorld()->IsServer()) {
-      // We can spawn normally on the server
-      return ActorDispatcher.SpawnActor(Transform, std::move(ActorDescription));
-    }
-    else {
-      // We need to make an RPC call to the server
-      ACarlaPlayerController *PlayerController = Cast<ACarlaPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-      checkf(
-          PlayerController != nullptr,
-          TEXT("PlayerController is not a ACarlaPlayerController, did you forget to set it in the project settings?"));
-      UE_LOG(LogCarla, Error, TEXT("Sending RPC with '%s' (UId=%d)"), *ActorDescription.Id, ActorDescription.UId);
-
-
-      PlayerController->SpawnActorWithInfo(Transform, std::move(ActorDescription));
-      uint32 Id = 1;
-      FActorView View = FActorView(Id, std::move(ActorDescription));
-      return MakeTuple(EActorSpawnResultStatus::Success, View);
-    }
-  }
+      FActorDescription ActorDescription);
 
   /// Spawns an actor based on @a ActorDescription at @a Transform. To properly
   /// despawn an actor created with this function call DestroyActor.
