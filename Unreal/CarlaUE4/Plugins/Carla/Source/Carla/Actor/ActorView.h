@@ -48,11 +48,18 @@ public:
 private:
 
   friend class FActorRegistry;
+  friend class UCarlaEpisode;
 
   FActorView(IdType ActorId, AActor &Actor, FActorDescription Description)
-    : Id(ActorId),
-      TheActor(&Actor),
-      Description(MakeShared<FActorDescription>(std::move(Description))) {
+      : Id(ActorId),
+        TheActor(&Actor),
+        Description(MakeShared<FActorDescription>(std::move(Description))) {
+    check(Id != 0u);
+  }
+
+  FActorView(IdType ActorId, FActorDescription Description)
+      : Id(ActorId),
+        Description(MakeShared<FActorDescription>(std::move(Description))) {
     check(Id != 0u);
   }
 
