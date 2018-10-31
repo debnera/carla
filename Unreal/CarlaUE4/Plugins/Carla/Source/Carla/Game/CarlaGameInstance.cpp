@@ -56,9 +56,11 @@ void UCarlaGameInstance::NotifyBeginEpisode(UCarlaEpisode &Episode)
     bServerIsRunning = true;
   }
   Server.NotifyBeginEpisode(Episode);
+  this->Episode = &Episode;
 }
 
 void UCarlaGameInstance::NotifyEndEpisode()
 {
   Server.NotifyEndEpisode();
+  this->Episode = nullptr;
 }

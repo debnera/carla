@@ -90,7 +90,8 @@ private:
     {
       RespondError(FActorSpawnResult::StatusToString(Result.Key));
     }
-    check(Result.Value.IsValid());
+    // Result value is always null if we use replication!
+    //check(Result.Value.IsValid());
     return Result.Value;
   }
 
@@ -109,6 +110,7 @@ private:
 
   carla::rpc::Actor SerializeActor(FActorView ActorView)
   {
+    UE_LOG(LogCarlaServer, Log, TEXT("Serializing actor '%s'"), *ActorView.GetActorDescription()->Id);
     if (ActorView.IsValid())
     {
       auto *Sensor = Cast<ASensor>(ActorView.GetActor());

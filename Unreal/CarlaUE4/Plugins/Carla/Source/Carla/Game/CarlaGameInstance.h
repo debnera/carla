@@ -72,6 +72,11 @@ public:
 
   void NotifyEndEpisode();
 
+  UCarlaEpisode *GetEpisode()
+  {
+    return Episode;
+  }
+
 private:
 
   UPROPERTY(VisibleAnywhere)
@@ -85,4 +90,6 @@ private:
   TUniquePtr<ICarlaGameControllerBase> GameController;
 
   FTheNewCarlaServer Server;
+
+  UCarlaEpisode *Episode = nullptr;
 };
