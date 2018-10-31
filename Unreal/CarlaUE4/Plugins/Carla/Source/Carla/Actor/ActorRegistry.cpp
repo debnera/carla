@@ -12,7 +12,14 @@
 FActorView FActorRegistry::Register(AActor &Actor, FActorDescription Description)
 {
   static IdType ID_COUNTER = 0u;
-  const auto Id = ++ID_COUNTER;
+  IdType Id;
+  if (Description.ActorReferenceId == 0u) {
+    Id = ++ID_COUNTER;
+  }
+  else {
+    Id = Description.ActorReferenceId;
+  }
+
   Actors.Emplace(Id, &Actor);
   if (Ids.Contains(&Actor))
   {

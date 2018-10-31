@@ -35,6 +35,12 @@ struct FActorDescription
   UPROPERTY(EditAnywhere, BlueprintReadWrite)
   TMap<FString, FActorAttribute> Variations;
 
+
+  /// Id of the actor that will be instantiated and added to the ActorRegistry.
+  /// Used to return an reference to the CARLA client before the Actor is instantiated.
+  UPROPERTY()
+  uint32 ActorReferenceId = 0u;
+
   TArray<FString> MapKeys;
   TArray<FActorAttribute> MapValues;
 
@@ -44,6 +50,8 @@ struct FActorDescription
   {
     Ar << UId;
     Ar << Id;
+    Ar << ActorReferenceId;
+    Ar << Class;
     if (Ar.IsLoading())
     {
       // Move data to Map

@@ -79,9 +79,10 @@ TPair<EActorSpawnResultStatus, FActorView> UCarlaEpisode::SpawnActorWithInfo(
 
 
     uint32 IdOffset = state->PlayerId * 10000; // 10000 should be enough room for every client to spawn their own
-    static IdType ID_COUNTER = 0u;
+    static FActorView::IdType ID_COUNTER = 0u;
     const auto Id = ++ID_COUNTER + IdOffset;
     UE_LOG(LogCarla, Error, TEXT("PlayerState id (UId=%d)"), Id);
+    ActorDescription.ActorReferenceId = Id;
     PlayerController->SpawnActorWithInfo(Transform, std::move(ActorDescription));
     FActorView View = FActorView(Id, std::move(ActorDescription));
     return MakeTuple(EActorSpawnResultStatus::Success, View);
