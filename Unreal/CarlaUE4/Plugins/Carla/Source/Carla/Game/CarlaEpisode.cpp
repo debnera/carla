@@ -83,8 +83,10 @@ TPair<EActorSpawnResultStatus, FActorView> UCarlaEpisode::SpawnActorWithInfo(
     const auto Id = ++ID_COUNTER + IdOffset;
     UE_LOG(LogCarla, Error, TEXT("PlayerState id (UId=%d)"), Id);
     ActorDescription.ActorReferenceId = Id;
+    FActorView View = FActorView(Id, ActorDescription);
     PlayerController->SpawnActorWithInfo(Transform, std::move(ActorDescription));
-    FActorView View = FActorView(Id, std::move(ActorDescription));
+
+    UE_LOG(LogCarla, Error, TEXT("Returning view with '%s' (UId=%d)"), *View.GetActorDescription()->Id, View.GetActorDescription()->UId);
     return MakeTuple(EActorSpawnResultStatus::Success, View);
   }
 }
