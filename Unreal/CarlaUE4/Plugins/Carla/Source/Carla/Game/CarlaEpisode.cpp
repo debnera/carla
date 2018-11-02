@@ -54,7 +54,7 @@ TPair<EActorSpawnResultStatus, FActorView> UCarlaEpisode::SpawnActorWithInfo(
     //Variations.Add(MapKeys[It.GetIndex()], MapValues[It.GetIndex()]);
     UE_LOG(LogCarla, Error, TEXT("MapKeys and values '%s' (UId=%s)"), *MapKeys[It.GetIndex()], *MapValues[It.GetIndex()].Value);
   }
-  if (GetWorld()->IsServer()) {
+  if (ActorDescription.Id.Contains("sensor", ESearchCase::IgnoreCase) || GetWorld()->IsServer()) {
     // We can spawn normally on the server
     return ActorDispatcher.SpawnActor(Transform, std::move(ActorDescription));
   }
