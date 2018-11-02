@@ -91,6 +91,11 @@ public:
     return ActorDispatcher.GetActorRegistry();
   }
 
+  FActorView RegisterActor(AActor *Actor, FActorDescription Description)
+  {
+    return ActorDispatcher.GetActorRegistry().Register(*Actor, Description);
+  }
+
 private:
 
   UPROPERTY(VisibleAnywhere)

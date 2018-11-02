@@ -4,6 +4,9 @@
 // This work is licensed under the terms of the MIT license.
 // For a copy, see <https://opensource.org/licenses/MIT>.
 
+#include <Carla/Actor/ActorDescription.h>
+#include <Carla/Game/CarlaGameInstance.h>
+#include <Carla/Game/CarlaEpisode.h>
 #include "Carla.h"
 #include "CarlaWheeledVehicle.h"
 
@@ -12,6 +15,7 @@
 
 #include "Components/BoxComponent.h"
 #include "Engine/CollisionProfile.h"
+#include "UnrealNetwork.h"
 
 // =============================================================================
 // -- Constructor and destructor -----------------------------------------------
@@ -118,4 +122,25 @@ void ACarlaWheeledVehicle::SetReverse(const bool Value)
 void ACarlaWheeledVehicle::SetHandbrakeInput(const bool Value)
 {
   GetVehicleMovementComponent()->SetHandbrakeInput(Value);
+}
+
+void ACarlaWheeledVehicle::OnRep_Description()
+{
+  UCarlaGameInstance *GameInstance = Cast<UCarlaGameInstance>(GetWorld()->GetGameInstance());
+  checkf(
+    GameInstance != nullptr,
+    TEXT("GameInstance is not a UCarlaGameInstance, did you forget to set it in the project settings?"));
+  UCarlaEpisode *Episode = GameInstance->GetEpisode();
+  if (Episode == nullptr) {
+    UE_LOG(LogCarla, Log, TEXT("Cannot spawn actor - server is missing Episode!"));
+    return;
+  }
+  Episode->RegisterActor(this, Description);
+
+}
+
+void ACarlaWheeledVehicle::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
+{
+  Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+  DOREPLIFETIME(ACarlaWheeledVehicle, Description);
 }

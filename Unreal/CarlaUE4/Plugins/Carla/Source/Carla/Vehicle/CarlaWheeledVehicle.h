@@ -10,6 +10,7 @@
 
 #include "Vehicle/CarlaWheeledVehicleState.h"
 #include "Vehicle/VehicleControl.h"
+#include "Actor/ActorDescription.h"
 
 #include "CoreMinimal.h"
 
@@ -88,6 +89,12 @@ public:
 public:
 
   UFUNCTION(Category = "CARLA Wheeled Vehicle", BlueprintCallable)
+  void SetDescription(FActorDescription ActorDescription)
+  {
+    Description = ActorDescription;
+  }
+
+  UFUNCTION(Category = "CARLA Wheeled Vehicle", BlueprintCallable)
   void ApplyVehicleControl(const FVehicleControl &VehicleControl);
 
   UFUNCTION(Category = "CARLA Wheeled Vehicle", BlueprintCallable)
@@ -131,8 +138,10 @@ public:
   UFUNCTION(Category = "AI Controller", BlueprintCallable)
   ECarlaWheeledVehicleState GetAIVehicleState() const
   {
-	  return State;
+    return State;
   }
+
+
 
 private:
 
@@ -145,6 +154,12 @@ private:
 
   UPROPERTY(Category = "CARLA Wheeled Vehicle", VisibleAnywhere)
   UVehicleAgentComponent *VehicleAgentComponent;
+
+  UPROPERTY(Category = "CARLA Wheeled Vehicle", VisibleAnywhere, ReplicatedUsing=OnRep_Description)
+  FActorDescription Description;
+
+  UFUNCTION()
+  void OnRep_Description();
 
   UPROPERTY()
   bool bIsInReverse = false;
