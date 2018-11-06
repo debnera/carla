@@ -23,6 +23,10 @@ class CARLA_API UCarlaEpisode : public UObject
 
 public:
 
+  void SetPlayerController(ACarlaPlayerController *Controller) {PlayerController = Controller;}
+
+  ACarlaPlayerController* GetPlayerController() {return PlayerController;}
+
   void SetMapName(const FString &InMapName)
   {
     MapName = InMapName;
@@ -105,4 +109,6 @@ private:
 
   UPROPERTY(VisibleAnywhere)
   APawn *Spectator = nullptr;
+
+  ACarlaPlayerController *PlayerController;
 };

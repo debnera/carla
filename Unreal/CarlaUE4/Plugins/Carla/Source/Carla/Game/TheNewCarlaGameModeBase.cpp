@@ -9,6 +9,7 @@
 
 #include "Carla/Game/Tagger.h"
 #include "Carla/Game/TaggerDelegate.h"
+#include "Carla/Game/CarlaPlayerController.h"
 
 ATheNewCarlaGameModeBase::ATheNewCarlaGameModeBase(const FObjectInitializer& ObjectInitializer)
   : Super(ObjectInitializer)
@@ -61,6 +62,15 @@ void ATheNewCarlaGameModeBase::BeginPlay()
 
   Episode->InitializeAtBeginPlay();
   GameInstance->NotifyBeginEpisode(*Episode);
+  /*
+  ACarlaPlayerController *Controller = Cast<ACarlaPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+  if (!Controller) {
+    UE_LOG(LogCarla, Error, TEXT("Missing CarlaPlayerController!"));
+    return;
+  }
+  Controller->SetEpisode(Episode);
+  Episode->SetController(Controller);
+  */
 }
 
 void ATheNewCarlaGameModeBase::Tick(float DeltaSeconds)

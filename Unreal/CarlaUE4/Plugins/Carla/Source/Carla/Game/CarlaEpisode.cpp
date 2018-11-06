@@ -33,6 +33,14 @@ void UCarlaEpisode::InitializeAtBeginPlay()
   {
     UE_LOG(LogCarla, Error, TEXT("Can't find spectator!"));
   }
+  ACarlaPlayerController *Controller = Cast<ACarlaPlayerController>(PlayerController);
+  if (!Controller) {
+    UE_LOG(LogCarla, Error, TEXT("Missing CarlaPlayerController!"));
+    return;
+  }
+  Controller->SetEpisode(this);
+  SetPlayerController(Controller);
+  UE_LOG(LogCarla, Error, TEXT("PlayerController and episode set!"));
 }
 
 TPair<EActorSpawnResultStatus, FActorView> UCarlaEpisode::SpawnActorWithInfo(

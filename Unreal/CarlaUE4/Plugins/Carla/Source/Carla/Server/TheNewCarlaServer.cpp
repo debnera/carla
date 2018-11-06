@@ -241,6 +241,8 @@ void FTheNewCarlaServer::FPimpl::BindActions()
 
   Server.BindSync("apply_control_to_actor", [this](cr::Actor Actor, cr::VehicleControl Control) {
     RequireEpisode();
+    Episode->GetPlayerController()->ApplyControlToActor(Actor.id, Control);
+    /*
     auto ActorView = Episode->GetActorRegistry().Find(Actor.id);
     if (!ActorView.IsValid() || ActorView.GetActor()->IsPendingKill()) {
       RespondErrorStr("unable to apply control: actor not found");
@@ -250,10 +252,13 @@ void FTheNewCarlaServer::FPimpl::BindActions()
       RespondErrorStr("unable to apply control: actor is not a vehicle");
     }
     Vehicle->ApplyVehicleControl(Control);
+     */
   });
 
   Server.BindSync("set_actor_autopilot", [this](cr::Actor Actor, bool bEnabled) {
     RequireEpisode();
+    Episode->GetPlayerController()->SetActorAutopilot(Actor.id, bEnabled);
+    /*
     auto ActorView = Episode->GetActorRegistry().Find(Actor.id);
     if (!ActorView.IsValid() || ActorView.GetActor()->IsPendingKill()) {
       RespondErrorStr("unable to set autopilot: actor not found");
@@ -274,6 +279,7 @@ void FTheNewCarlaServer::FPimpl::BindActions()
       Controller2->SetAutopilot(bEnabled);
     }
     RespondErrorStr("unable to set autopilot: vehicle has an incompatible controller");
+    */
   });
 }
 
