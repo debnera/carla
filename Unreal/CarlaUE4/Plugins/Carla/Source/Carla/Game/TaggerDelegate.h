@@ -5,7 +5,7 @@
 // For a copy, see <https://opensource.org/licenses/MIT>.
 
 #pragma once
-
+#include "Runtime/Engine/Classes/Engine/World.h"
 #include "TaggerDelegate.generated.h"
 
 /// Used to tag every actor that is spawned into the world.
