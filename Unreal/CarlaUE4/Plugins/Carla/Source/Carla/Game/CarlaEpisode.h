@@ -36,7 +36,7 @@ public:
 
   ACarlaPlayerController* GetPlayerController() {return PlayerController;}
 
-  void SetMapName(const FString &InMapName);
+  //void SetMapName(const FString &InMapName);
 
   UFUNCTION(BlueprintCallable)
   const FString &GetMapName() const

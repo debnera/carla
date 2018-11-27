@@ -33,7 +33,7 @@ void ACarlaGameStateBase::OnRep_ReplicatedHasBegunPlay() {
   checkf(
       Episode != nullptr,
       TEXT("Missing episode, can't continue without an episode!"));
-  Episode->SetMapName("Map_name"); /// @todo Get map name from somewhere
+  //Episode->SetMapName("Map_name"); /// @todo Get map name from somewhere
 
   GameInstance = Cast<UCarlaGameInstance>(GetGameInstance());
   checkf(
