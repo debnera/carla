@@ -132,12 +132,12 @@ public:
 
   carla::rpc::Actor SerializeActor(FActorView ActorView)
   {
-<<<<<<< HEAD
+
     carla::rpc::Actor Actor;
     Actor.id = ActorView.GetActorId();
-=======
-    UE_LOG(LogCarlaServer, Log, TEXT("Serializing actor '%s'"), *ActorView.GetActorDescription()->Id);
->>>>>>> 0.9.0_replication
+
+    UE_LOG(LogCarlaServer, Log, TEXT("Serializing actor '%s'"), Actor.id);
+
     if (ActorView.IsValid())
     {
       Actor.description = *ActorView.GetActorDescription();

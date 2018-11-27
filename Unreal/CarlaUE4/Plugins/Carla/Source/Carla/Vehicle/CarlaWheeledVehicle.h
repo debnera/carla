@@ -148,17 +148,8 @@ public:
     State = InState;
   }
 
-<<<<<<< HEAD
-=======
-  UFUNCTION(Category = "AI Controller", BlueprintCallable)
-  ECarlaWheeledVehicleState GetAIVehicleState() const
-  {
-    return State;
-  }
 
 
-
->>>>>>> 0.9.0_replication
 private:
 
   /// Current state of the vehicle controller (for debugging purposes).
@@ -171,9 +162,9 @@ private:
   UPROPERTY(Category = "CARLA Wheeled Vehicle", VisibleAnywhere)
   UVehicleAgentComponent *VehicleAgentComponent;
 
-<<<<<<< HEAD
+
   FVehicleControl Control;
-=======
+
   UPROPERTY(Category = "CARLA Wheeled Vehicle", VisibleAnywhere, ReplicatedUsing=OnRep_Description)
   FActorDescription Description;
 
@@ -182,5 +173,5 @@ private:
 
   UPROPERTY()
   bool bIsInReverse = false;
->>>>>>> 0.9.0_replication
+
 };

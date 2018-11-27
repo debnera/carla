@@ -76,7 +76,7 @@ void ATheNewCarlaGameModeBase::InitGame(
     // Apply default weather.
     Episode->Weather->ApplyWeather(FWeatherParameters());
   } else {
-    UE_LOG(LogCarla, Error, TEXT("Missing weather class!"));
+    UE_LOG(LogCarla, Error, TEXT("makeMissing weather class!"));
   }
 
   SpawnActorFactories();

@@ -8,13 +8,13 @@
 
 
 #include "Carla/Actor/ActorDispatcher.h"
-<<<<<<< HEAD
+
 #include "Carla/Sensor/WorldObserver.h"
 #include "Carla/Weather/Weather.h"
-=======
+
 #include "Kismet/GameplayStatics.h"
 #include "Carla/Game/CarlaPlayerController.h"
->>>>>>> 0.9.0_replication
+
 
 #include "CarlaEpisode.generated.h"
 
@@ -28,19 +28,15 @@ class CARLA_API UCarlaEpisode : public UObject
 
 public:
 
-
   UCarlaEpisode(const FObjectInitializer &ObjectInitializer);
 
-  auto GetId() const;
+  auto GetId() const {return Id;};
 
   void SetPlayerController(ACarlaPlayerController *Controller) {PlayerController = Controller;}
 
   ACarlaPlayerController* GetPlayerController() {return PlayerController;}
 
-  void SetMapName(const FString &InMapName)
-  {
-    return Id;
-  }
+  void SetMapName(const FString &InMapName);
 
   UFUNCTION(BlueprintCallable)
   const FString &GetMapName() const
@@ -108,22 +104,18 @@ public:
     return ActorDispatcher.GetActorRegistry();
   }
 
-<<<<<<< HEAD
+
   const AWorldObserver *StartWorldObserver(carla::streaming::MultiStream Stream);
 
   const AWorldObserver *GetWorldObserver() const
   {
     return WorldObserver;
-=======
+  }
+
   FActorView RegisterActor(AActor *Actor, FActorDescription Description)
   {
     return ActorDispatcher.GetActorRegistry().Register(*Actor, Description);
->>>>>>> 0.9.0_replication
   }
-
-private:
-
-  friend class ATheNewCarlaGameModeBase;
 
   void InitializeAtBeginPlay();
 
@@ -131,6 +123,10 @@ private:
   {
     ActorDispatcher.Bind(ActorFactory);
   }
+
+private:
+
+  friend class ATheNewCarlaGameModeBase;
 
   const uint32 Id = 0u;
 
@@ -142,13 +138,11 @@ private:
   UPROPERTY(VisibleAnywhere)
   APawn *Spectator = nullptr;
 
-<<<<<<< HEAD
   UPROPERTY(VisibleAnywhere)
   AWeather *Weather = nullptr;
 
   UPROPERTY(VisibleAnywhere)
   AWorldObserver *WorldObserver = nullptr;
-=======
+
   ACarlaPlayerController *PlayerController;
->>>>>>> 0.9.0_replication
 };

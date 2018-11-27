@@ -7,6 +7,8 @@
 #pragma once
 
 #include "Carla/Sensor/Sensor.h"
+#include "Carla/Game/CarlaEpisode.h"
+#include "Carla/Game/CarlaGameInstance.h"
 
 #include "CollisionSensor.generated.h"
 
