@@ -72,9 +72,15 @@ public:
 
   void NotifyEndEpisode();
 
+
   const FTheNewCarlaServer &GetServer() const
   {
     return Server;
+  }
+
+  UCarlaEpisode *GetEpisode()
+  {
+    return Episode;
   }
 
 private:
@@ -90,4 +96,6 @@ private:
   TUniquePtr<ICarlaGameControllerBase> GameController;
 
   FTheNewCarlaServer Server;
+
+  UCarlaEpisode *Episode = nullptr;
 };

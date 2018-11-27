@@ -6,9 +6,15 @@
 
 #pragma once
 
+
 #include "Carla/Actor/ActorDispatcher.h"
+<<<<<<< HEAD
 #include "Carla/Sensor/WorldObserver.h"
 #include "Carla/Weather/Weather.h"
+=======
+#include "Kismet/GameplayStatics.h"
+#include "Carla/Game/CarlaPlayerController.h"
+>>>>>>> 0.9.0_replication
 
 #include "CarlaEpisode.generated.h"
 
@@ -22,9 +28,16 @@ class CARLA_API UCarlaEpisode : public UObject
 
 public:
 
+
   UCarlaEpisode(const FObjectInitializer &ObjectInitializer);
 
-  auto GetId() const
+  auto GetId() const;
+
+  void SetPlayerController(ACarlaPlayerController *Controller) {PlayerController = Controller;}
+
+  ACarlaPlayerController* GetPlayerController() {return PlayerController;}
+
+  void SetMapName(const FString &InMapName)
   {
     return Id;
   }
@@ -67,10 +80,7 @@ public:
   /// view is invalid.
   TPair<EActorSpawnResultStatus, FActorView> SpawnActorWithInfo(
       const FTransform &Transform,
-      FActorDescription ActorDescription)
-  {
-    return ActorDispatcher.SpawnActor(Transform, std::move(ActorDescription));
-  }
+      FActorDescription ActorDescription);
 
   /// Spawns an actor based on @a ActorDescription at @a Transform. To properly
   /// despawn an actor created with this function call DestroyActor.
@@ -98,11 +108,17 @@ public:
     return ActorDispatcher.GetActorRegistry();
   }
 
+<<<<<<< HEAD
   const AWorldObserver *StartWorldObserver(carla::streaming::MultiStream Stream);
 
   const AWorldObserver *GetWorldObserver() const
   {
     return WorldObserver;
+=======
+  FActorView RegisterActor(AActor *Actor, FActorDescription Description)
+  {
+    return ActorDispatcher.GetActorRegistry().Register(*Actor, Description);
+>>>>>>> 0.9.0_replication
   }
 
 private:
@@ -126,9 +142,13 @@ private:
   UPROPERTY(VisibleAnywhere)
   APawn *Spectator = nullptr;
 
+<<<<<<< HEAD
   UPROPERTY(VisibleAnywhere)
   AWeather *Weather = nullptr;
 
   UPROPERTY(VisibleAnywhere)
   AWorldObserver *WorldObserver = nullptr;
+=======
+  ACarlaPlayerController *PlayerController;
+>>>>>>> 0.9.0_replication
 };

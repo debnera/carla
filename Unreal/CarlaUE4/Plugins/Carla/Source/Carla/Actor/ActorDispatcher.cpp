@@ -67,6 +67,10 @@ TPair<EActorSpawnResultStatus, FActorView> FActorDispatcher::SpawnActor(
     check(Result.Status != EActorSpawnResultStatus::Success);
   }
 
+  ACarlaWheeledVehicle *Vehicle = Cast<ACarlaWheeledVehicle>(Result.Actor);
+  if (Vehicle)
+    Vehicle->SetDescription(Description);
+
   return MakeTuple(Result.Status, View);
 }
 

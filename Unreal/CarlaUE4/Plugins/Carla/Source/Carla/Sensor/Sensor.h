@@ -10,6 +10,8 @@
 
 #include "Carla/Actor/ActorDescription.h"
 #include "Carla/Sensor/DataStream.h"
+#include "Carla/Actor/ActorDescription.h"
+#include "Carla/Actor/ActorDefinition.h"
 
 #include "Sensor.generated.h"
 

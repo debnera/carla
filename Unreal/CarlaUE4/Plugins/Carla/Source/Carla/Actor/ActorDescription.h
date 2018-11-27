@@ -34,4 +34,53 @@ struct FActorDescription
   ///   Value: The attribute.
   UPROPERTY(EditAnywhere, BlueprintReadWrite)
   TMap<FString, FActorAttribute> Variations;
+
+
+  /// Id of the actor that will be instantiated and added to the ActorRegistry.
+  /// Used to return an reference to the CARLA client before the Actor is instantiated.
+  UPROPERTY()
+  uint32 ActorReferenceId = 0u;
+
+  TArray<FString> MapKeys;
+  TArray<FActorAttribute> MapValues;
+
+
+  // Add replication support for TMap
+  bool NetSerialize(FArchive& Ar, class UPackageMap* Map, bool& bOutSuccess)
+  {
+    Ar << UId;
+    Ar << Id;
+    Ar << ActorReferenceId;
+    Ar << Class;
+    if (Ar.IsLoading())
+    {
+      // Move data to Map
+      Ar << MapKeys;
+      Ar << MapValues;
+      for (auto It = MapKeys.CreateConstIterator(); It; ++It)
+      {
+        Variations.Add(MapKeys[It.GetIndex()], MapValues[It.GetIndex()]);
+      }
+    } else {
+      // Move data to Arrays
+      Variations.GenerateKeyArray(MapKeys);
+      Variations.GenerateValueArray(MapValues);
+      Ar << MapKeys;
+      Ar << MapValues;
+    }
+    MapKeys.Empty();
+    MapValues.Empty();
+
+    bOutSuccess = true;
+    return true;
+  }
+};
+
+template<>
+struct TStructOpsTypeTraits<FActorDescription> : public TStructOpsTypeTraitsBase2<FActorDescription>
+{
+  enum
+  {
+    WithNetSerializer = true
+  };
 };

@@ -68,3 +68,12 @@ struct CARLA_API FActorAttribute
   UPROPERTY(EditAnywhere, BlueprintReadWrite)
   FString Value;
 };
+
+FORCEINLINE FArchive &operator <<(FArchive &Ar, FActorAttribute& TheStruct )
+{
+  Ar << TheStruct.Id;
+  Ar << TheStruct.Type;
+  Ar << TheStruct.Value;
+
+  return Ar;
+}

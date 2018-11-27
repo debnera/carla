@@ -30,6 +30,8 @@
 #include <compiler/enable-ue4-macros.h>
 
 #include <vector>
+#include <Carla/Vehicle/WheeledVehicleAIController.h>
+#include "Carla/Vehicle/MyWheeledVehicleAIController.h"
 
 // =============================================================================
 // -- Static local functions ---------------------------------------------------
@@ -95,7 +97,8 @@ private:
     {
       RespondError(FActorSpawnResult::StatusToString(Result.Key));
     }
-    check(Result.Value.IsValid());
+    // Result value is always null if we use replication!
+    //check(Result.Value.IsValid());
     return Result.Value;
   }
 
@@ -129,8 +132,12 @@ public:
 
   carla::rpc::Actor SerializeActor(FActorView ActorView)
   {
+<<<<<<< HEAD
     carla::rpc::Actor Actor;
     Actor.id = ActorView.GetActorId();
+=======
+    UE_LOG(LogCarlaServer, Log, TEXT("Serializing actor '%s'"), *ActorView.GetActorDescription()->Id);
+>>>>>>> 0.9.0_replication
     if (ActorView.IsValid())
     {
       Actor.description = *ActorView.GetActorDescription();
@@ -357,6 +364,8 @@ void FTheNewCarlaServer::FPimpl::BindActions()
 
   Server.BindSync("apply_control_to_actor", [this](cr::Actor Actor, cr::VehicleControl Control) {
     RequireEpisode();
+    Episode->GetPlayerController()->ApplyControlToActor(Actor.id, Control);
+    /*
     auto ActorView = Episode->GetActorRegistry().Find(Actor.id);
     if (!ActorView.IsValid() || ActorView.GetActor()->IsPendingKill()) {
       RespondErrorStr("unable to apply control: actor not found");
@@ -366,10 +375,13 @@ void FTheNewCarlaServer::FPimpl::BindActions()
       RespondErrorStr("unable to apply control: actor is not a vehicle");
     }
     Vehicle->ApplyVehicleControl(Control);
+     */
   });
 
   Server.BindSync("set_actor_autopilot", [this](cr::Actor Actor, bool bEnabled) {
     RequireEpisode();
+    Episode->GetPlayerController()->SetActorAutopilot(Actor.id, bEnabled);
+    /*
     auto ActorView = Episode->GetActorRegistry().Find(Actor.id);
     if (!ActorView.IsValid() || ActorView.GetActor()->IsPendingKill()) {
       RespondErrorStr("unable to set autopilot: actor not found");
@@ -379,10 +391,18 @@ void FTheNewCarlaServer::FPimpl::BindActions()
       RespondErrorStr("unable to set autopilot: actor is not a vehicle");
     }
     auto Controller = Cast<AWheeledVehicleAIController>(Vehicle->GetController());
-    if (Controller == nullptr) {
-      RespondErrorStr("unable to set autopilot: vehicle has an incompatible controller");
+    auto Controller2 = Cast<AMyWheeledVehicleAIController>(Vehicle->GetController());
+    if (Vehicle->GetController() == nullptr) {
+      RespondErrorStr("unable to set autopilot: vehicle does not have a controller");
     }
-    Controller->SetAutopilot(bEnabled);
+    if (Controller != nullptr) {
+      Controller->SetAutopilot(bEnabled);
+    }
+    if (Controller2 != nullptr) {
+      Controller2->SetAutopilot(bEnabled);
+    }
+    RespondErrorStr("unable to set autopilot: vehicle has an incompatible controller");
+    */
   });
 
   Server.BindSync("draw_debug_shape", [this](const cr::DebugShape &shape) {

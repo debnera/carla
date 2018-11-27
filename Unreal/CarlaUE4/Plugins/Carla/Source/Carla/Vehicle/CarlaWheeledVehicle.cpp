@@ -5,12 +5,17 @@
 // For a copy, see <https://opensource.org/licenses/MIT>.
 
 #include "Carla.h"
+#include "Carla/Actor/ActorDescription.h"
+#include "Carla/Game/CarlaGameInstance.h"
+#include "Carla/Game/CarlaEpisode.h"
 #include "CarlaWheeledVehicle.h"
 
 #include "Agent/VehicleAgentComponent.h"
+#include "WheeledVehicleAIController.h"
 
 #include "Components/BoxComponent.h"
 #include "Engine/CollisionProfile.h"
+#include "UnrealNetwork.h"
 
 // =============================================================================
 // -- Constructor and destructor -----------------------------------------------
@@ -26,6 +31,12 @@ ACarlaWheeledVehicle::ACarlaWheeledVehicle(const FObjectInitializer& ObjectIniti
 
   VehicleAgentComponent = CreateDefaultSubobject<UVehicleAgentComponent>(TEXT("VehicleAgentComponent"));
   VehicleAgentComponent->SetupAttachment(RootComponent);
+
+  if (GetWorld() && GetWorld()->IsServer()) {
+
+    //AIControllerClass = AWheeledVehicleAIController::StaticClass();
+    //SpawnDefaultController();
+  }
 
   GetVehicleMovementComponent()->bReverseAsBrake = false;
 }
@@ -115,4 +126,25 @@ void ACarlaWheeledVehicle::SetHandbrakeInput(const bool Value)
 {
   GetVehicleMovementComponent()->SetHandbrakeInput(Value);
   Control.bHandBrake = Value;
+}
+
+void ACarlaWheeledVehicle::OnRep_Description()
+{
+  UCarlaGameInstance *GameInstance = Cast<UCarlaGameInstance>(GetWorld()->GetGameInstance());
+  checkf(
+    GameInstance != nullptr,
+    TEXT("GameInstance is not a UCarlaGameInstance, did you forget to set it in the project settings?"));
+  UCarlaEpisode *Episode = GameInstance->GetEpisode();
+  if (Episode == nullptr) {
+    UE_LOG(LogCarla, Log, TEXT("Cannot spawn actor - server is missing Episode!"));
+    return;
+  }
+  Episode->RegisterActor(this, Description);
+
+}
+
+void ACarlaWheeledVehicle::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
+{
+  Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+  DOREPLIFETIME(ACarlaWheeledVehicle, Description);
 }

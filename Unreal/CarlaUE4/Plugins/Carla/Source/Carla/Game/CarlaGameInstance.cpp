@@ -11,7 +11,11 @@
 #include "Server/ServerGameController.h"
 #include "Settings/CarlaSettings.h"
 
+#include "Runtime/Core/Public/Math/UnrealMathUtility.h"
+#include "Engine/GameEngine.h"
+
 #include <thread>
+
 
 static uint32 GetNumberOfThreadsForRPCServer()
 {
@@ -44,14 +48,19 @@ void UCarlaGameInstance::NotifyBeginEpisode(UCarlaEpisode &Episode)
 {
   if (!bServerIsRunning)
   {
-    Server.Start(CarlaSettings->WorldPort);
+    int16 PortOffset = FMath::RandRange(10, 500) * 2;
+    Server.Start(CarlaSettings->WorldPort + PortOffset);
+    if(GEngine)
+      GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow, TEXT("Started server at port ") + FString::FromInt(CarlaSettings->WorldPort + PortOffset));
     Server.AsyncRun(GetNumberOfThreadsForRPCServer());
     bServerIsRunning = true;
   }
   Server.NotifyBeginEpisode(Episode);
+  this->Episode = &Episode;
 }
 
 void UCarlaGameInstance::NotifyEndEpisode()
 {
   Server.NotifyEndEpisode();
+  this->Episode = nullptr;
 }
