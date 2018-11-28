@@ -138,9 +138,11 @@ public:
 
     //UE_LOG(LogCarlaServer, Log, TEXT("Serializing actor '%s'"), Actor.id);
 
+    // Locally created actors are never valid, but they should have a description
+    Actor.description = *ActorView.GetActorDescription();
     if (ActorView.IsValid())
     {
-      Actor.description = *ActorView.GetActorDescription();
+      //Actor.description = *ActorView.GetActorDescription();
       Actor.bounding_box = GetActorBoundingBox(*ActorView.GetActor());
       Actor.semantic_tags.reserve(ActorView.GetSemanticTags().Num());
       using tag_t = decltype(Actor.semantic_tags)::value_type;
