@@ -237,7 +237,7 @@ float AMyWheeledVehicleAIController::GoToNextTargetLocation(FVector &Direction)
     return FVector{Result.X, Result.Y, CurrentLocation.Z};
   }();
 
-  if (Target.Equals(CurrentLocation, 80.0f)) {
+  if (Target.Equals(CurrentLocation, 200.0f)) {
     TargetLocations.pop();
     if (!TargetLocations.empty()) {
       return GoToNextTargetLocation(Direction);
@@ -316,7 +316,7 @@ float AMyWheeledVehicleAIController::CalcStreeringValue(FVector &direction)
 
   FRoadMapPixelData roadData = RoadMap->GetDataAt(GetPawn()->GetActorLocation());
   if (!roadData.IsRoad()) {
-    steering = -1;
+    steering = 0.0f;
   } else if (roadData.HasDirection()) {
 
     direction = roadData.GetDirection();
