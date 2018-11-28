@@ -48,8 +48,20 @@ void UCarlaGameInstance::NotifyBeginEpisode(UCarlaEpisode &Episode)
 {
   if (!bServerIsRunning)
   {
-    int16 PortOffset = FMath::RandRange(10, 500) * 2;
-    Server.Start(CarlaSettings->WorldPort + PortOffset);
+    bool success = false;
+    int16 PortOffset = 0;
+    while (success == false) {
+      try {
+        Server.Start(CarlaSettings->WorldPort + PortOffset);
+        success = true;
+      }
+      catch (...) {
+        // TODO: Instead of catching everything, catch only the relevant exception (port is already in use)
+        PortOffset += 2;
+        UE_LOG(LogCarla, Error, TEXT("Could not start server with port %d, trying to open the next possible port"), (CarlaSettings->WorldPort + PortOffset));
+      }
+    }
+
     if(GEngine)
       GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow, TEXT("Started server at port ") + FString::FromInt(CarlaSettings->WorldPort + PortOffset));
     Server.AsyncRun(GetNumberOfThreadsForRPCServer());
