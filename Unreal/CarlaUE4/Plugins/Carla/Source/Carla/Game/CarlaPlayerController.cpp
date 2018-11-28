@@ -21,7 +21,7 @@ void ACarlaPlayerController::SpawnActorWithInfo_Implementation(
     UE_LOG(LogCarla, Log, TEXT("Cannot spawn actor - server is missing Episode!"));
     return;
   }
-  UE_LOG(LogCarla, Error, TEXT("Spawning with '%s' (UId=%d)"), *ActorDescription.Id, ActorDescription.UId);
+  //UE_LOG(LogCarla, Error, TEXT("Spawning with '%s' (UId=%d)"), *ActorDescription.Id, ActorDescription.UId);
   Episode->SpawnActorWithInfo(Transform, std::move(ActorDescription));
 
 }
